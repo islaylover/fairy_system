@@ -1,0 +1,108 @@
+services:
+  # Laravel 12.x サービス
+  web_app:
+    platform: linux/x86_64  # M1 Macで必要
+    build:
+      context: .
+      dockerfile: ./docker/laravel/Dockerfile  # Laravel用のDockerfile
+    volumes:
+      - ./laravel:/var/www/fairy_system  # Laravelアプリケーションをマウント
+    env_file:
+      - .env  # .env ファイルを読み込む
+    environment:
+      TZ: Asia/Tokyo
+    depends_on:
+      - mysql
+    networks:
+      - fairy_network
+
+  # MySQL 8.x サービス
+  mysql:
+    platform: linux/x86_64  # M1 Macで必要
+    image: mysql:8.0
+    env_file:
+      - .env  # .env ファイルを読み込む
+    environment:
+      TZ: Asia/Tokyo
+    command:
+      - --default-time-zone=Asia/Tokyo
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"  # MySQLのポート設定
+    networks:
+      - fairy_network
+
+  # Redis サービス
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - fairy_network
+
+  # Pythonバッチ処理サービス
+  python_batch:
+    platform: linux/x86_64  # M1 Macで必要
+    build:
+      context: .
+      dockerfile: ./docker/python/Dockerfile
+    volumes:
+      - ./python_batch:/app
+    working_dir: /app
+    env_file:
+      - .env  # .env ファイルを読み込む
+    environment:
+      TZ: Asia/Tokyo
+    networks:
+      - fairy_network
+
+  # Nginx サービス（SSL対応）
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile  # Nginx用Dockerfileをビルド
+    volumes:
+      - ./laravel:/var/www/fairy_system  # Laravelアプリケーションをマウント
+      - ./log:/var/log/nginx
+    ports:
+      - "443:443"  # SSL用ポート
+      - "80:80"    # HTTP用ポート
+    depends_on:
+      - web_app
+      - vue3_frontend
+    networks:
+      - fairy_network
+
+  # Vue 3 フロントエンドサービス
+  vue3_frontend:
+    platform: linux/x86_64  # M1 Macで必要
+    build:
+      context: .
+      dockerfile: ./docker/vue3/Dockerfile  # Vue3用Dockerfileをビルド
+    volumes:
+      - ./vue3:/app
+      - vue_node_modules:/app/node_modules  # 依存は匿名ボリュームに
+    environment:
+      CHOKIDAR_USEPOLLING: "true" # ホットリロード安定化
+    ports: [] #外部公開しない
+    restart: unless-stopped
+    networks:
+      - fairy_network
+
+  # Mailpit サービス
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025" # Web UI
+      - "1025:1025" # SMTP Port
+    networks:
+      - fairy_network
+
+networks:
+  fairy_network:
+    driver: bridge
+
+volumes:
+  vue_node_modules: {}
