@@ -2,6 +2,7 @@
 
 OpenAI APIの利用額制限付きリクエスト管理システム。
 
+---
 
 ## Screenshots
 
@@ -12,7 +13,6 @@ OpenAI APIの利用額制限付きリクエスト管理システム。
 ### Dashboard
 
 ![Dashboard](docs/images/request.png)
-
 
 ---
 
@@ -42,27 +42,25 @@ OpenAI APIの利用額制限付きリクエスト管理システム。
 
 ## 3. OpenAI API 利用コスト計算
 
-OpenAI API の利用額は以下の式で算出する。
-
-```
+```text
 利用額($) =
 (input_tokens / 1,000,000) × input単価
 +
 (output_tokens / 1,000,000) × output単価
 ```
 
-※ output token は生成処理（推論）が発生するため高コスト
-※ input単価 < output単価 となるのが一般的
+※ output token は生成処理のため高コスト
+※ input単価 < output単価
 
-単価は以下で管理する：
+単価設定：
 
-* `laravel/config/chatgpt.php`
+```
+laravel/config/chatgpt.php
+```
 
 ---
 
 ## 4. 利用制限
-
-以下の制限を設ける。
 
 * リクエスト単位の最大トークン数
 * 日次トークン制限
@@ -71,9 +69,7 @@ OpenAI API の利用額は以下の式で算出する。
 
 ---
 
-### 利用制限の設定
-
-`.env` と `laravel/config/chatgpt.php` で管理する。
+### 利用制限設定
 
 ```env
 CHATGPT_DAILY_MAX_TOKENS=0
@@ -81,30 +77,19 @@ CHATGPT_MONTHLY_USER_LIMIT_USD=0.00500
 CHATGPT_MONTHLY_GLOBAL_LIMIT_USD=10.00000
 ```
 
-| 設定値                              | 内容                   |
-| -------------------------------- | -------------------- |
-| CHATGPT_DAILY_MAX_TOKENS         | 1日あたりの総トークン上限（0=無制限） |
-| CHATGPT_MONTHLY_USER_LIMIT_USD   | ユーザーごとの月間利用額上限       |
-| CHATGPT_MONTHLY_GLOBAL_LIMIT_USD | システム全体の月間利用額上限       |
-
----
-
-### モデル単価設定
-
-```php
-'price_per_million_tokens' => [
-    'input' => 2.5,
-    'output' => 10.0,
-],
-```
+| 設定値                              | 内容              |
+| -------------------------------- | --------------- |
+| CHATGPT_DAILY_MAX_TOKENS         | 日次トークン上限（0=無制限） |
+| CHATGPT_MONTHLY_USER_LIMIT_USD   | ユーザー月額制限        |
+| CHATGPT_MONTHLY_GLOBAL_LIMIT_USD | システム全体制限        |
 
 ---
 
 ## 🚀 5. セットアップ（初回のみ）
 
-### 5.1 .env 作成
+---
 
-プロジェクト直下に `.env` を作成する。
+### 5.1 .env 作成
 
 ```env
 OPENAI_API_KEY=your_api_key_here
@@ -123,34 +108,44 @@ CHATGPT_MONTHLY_USER_LIMIT_USD=0.00500
 CHATGPT_MONTHLY_GLOBAL_LIMIT_USD=10.00000
 ```
 
-※ `.env` は Git に含めないこと
+※ `.env` はGitに含めない
 
 ---
 
-## 🔑 OpenAI API Key 設定
+## 🔐 SSL証明書（必須 / Docker起動前に実行）
 
-本システムは OpenAI API を使用します。
+### Vue3用
 
-### 1. APIキー取得
+```bash
+mkdir -p vue3/certs
 
-https://platform.openai.com/
-
-から API Key を発行します。
-
----
-
-### 2. .env に設定
-
-```env
-OPENAI_API_KEY=your_api_key_here
+openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout vue3/certs/localhost.key \
+  -out vue3/certs/localhost.crt
 ```
 
 ---
 
-### 3. 注意
+### Nginx用
 
-* APIキーは絶対に公開しないこと
-* `.env` はGit管理しないこと
+```bash
+mkdir -p docker/nginx/ssl
+
+openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout docker/nginx/ssl/server.key \
+  -out docker/nginx/ssl/server.crt
+```
+
+---
+
+### 注意
+
+* Common Name → `localhost`
+* 自己署名証明書のためブラウザ警告あり
+* 秘密鍵（*.key）はGitに含めない
+* `.gitignore` により除外済み
 
 ---
 
@@ -175,22 +170,25 @@ php artisan migrate
 
 ---
 
-### 5.4 Vue 初期化（必要な場合のみ）
+### 5.4 Vue 初期化
+
+通常不要（Docker buildで実行済み）
+
+依存変更時のみ：
 
 ```bash
-docker compose exec vue3_frontend sh
-npm install
+docker compose up -d --build
 ```
 
 ---
 
 ### 5.5 Python 初期化
 
-不要（Docker build 時に完了）
+不要（Docker build済み）
 
 ---
 
-## ▶ 6. 起動方法（日常運用）
+## ▶ 6. 起動方法
 
 ```bash
 docker compose up -d
@@ -209,13 +207,10 @@ python main.py
 
 ## 🌐 8. アクセス
 
-### Web
-
-https://fairy_system.com
-
-### Mail（Mailpit）
-
-http://localhost:8025
+| 種別   | URL                      |
+| ---- | ------------------------ |
+| Web  | https://fairy_system.com |
+| Mail | http://localhost:8025    |
 
 ---
 
@@ -233,7 +228,7 @@ docker compose down
 docker compose up -d --build
 ```
 
-### ログ確認
+### ログ
 
 ```bash
 docker compose logs -f
@@ -241,30 +236,21 @@ docker compose logs -f
 
 ---
 
-## 🔐 10. SSL証明書について
-
-自己署名証明書は各自で生成してください。
-
-```bash
-openssl req -x509 -nodes -days 365 \
-  -newkey rsa:2048 \
-  -keyout docker/nginx/ssl/server.key \
-  -out docker/nginx/ssl/server.crt
-```
-
-※ `server.key`（秘密鍵）はGitに含めないこと
-
----
-
-## ⚠ 11. 注意点
+## ⚠ 10. 注意点
 
 ### Laravel
 
-`config/chatgpt.php` に自分のOpen AI APIで許容する制限額を定義
+```
+config/chatgpt.php
+```
+
+で利用制限管理
+
+---
 
 ### Python
 
-Open AI API関連の設定情報[制限額、MAXトークン数等]は Laravel API から取得している
+Laravel APIから設定取得
 
 ```
 GET /api/batch/chatgpt/config
@@ -275,5 +261,5 @@ GET /api/batch/chatgpt/config
 ## 💡 Tips
 
 * OpenAIは「outputコストが高い」
-* 利用制限は必ずテストすること
+* 制限ロジックは必須
 * バッチは「止まる設計」が重要
