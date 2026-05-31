@@ -13,7 +13,7 @@ class UserPassword
     ) {
         StringValidator::validate($hashedPassword, [
             'label' => 'ユーザーパスワード(ハッシュ)',
-            'max' => 255
+            'max' => 255,
         ]);
     }
 

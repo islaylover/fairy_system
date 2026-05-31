@@ -1,15 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ChatGptConfigController;
+use App\Http\Controllers\Api\RegistrationController;
+use App\Http\Controllers\Api\RequestController;
+use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\UsageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\TokenController;
-use App\Http\Controllers\Api\RegistrationController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\RequestController;
-use App\Http\Controllers\Api\ChatGptConfigController;
-use App\Http\Controllers\Api\ChatGptConfigForBatchController;
-use App\Http\Controllers\Api\UsageController;
-use Inertia\Middleware;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -35,9 +33,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:sanctum');
 
-
 // For Vue 3 ChatGPT APIへのリクエスト管理
-Route::middleware('auth:sanctum')->group(function () {  
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/requests', [RequestController::class, 'index']);
     Route::post('/requests', [RequestController::class, 'store']);
     Route::patch('/requests/{id}', [RequestController::class, 'update']);

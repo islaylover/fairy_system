@@ -15,18 +15,18 @@ final class MySqlConversationLock implements ConversationLockInterface
         $lockName = "request_conv_{$userId}";
 
         $locked = DB::selectOne(
-            "SELECT GET_LOCK(?, ?) AS l",
+            'SELECT GET_LOCK(?, ?) AS l',
             [$lockName, $timeoutSeconds]
         );
 
-        if (!$locked || (int)($locked->l ?? 0) !== 1) {
+        if (! $locked || (int) ($locked->l ?? 0) !== 1) {
             throw new RuntimeException('会話ID採番ロックの取得に失敗しました。もう一度お試しください。');
         }
 
         try {
             return $fn();
         } finally {
-            DB::selectOne("SELECT RELEASE_LOCK(?) AS r", [$lockName]);
+            DB::selectOne('SELECT RELEASE_LOCK(?) AS r', [$lockName]);
         }
     }
 }

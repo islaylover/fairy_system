@@ -12,7 +12,7 @@ readonly class UserEmail
         private string $email
     ) {
         EmailValidator::validateEmail($email, [
-            'label' => 'ユーザーのメールアドレス'
+            'label' => 'ユーザーのメールアドレス',
         ]);
     }
 

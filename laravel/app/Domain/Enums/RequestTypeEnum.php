@@ -12,10 +12,9 @@ enum RequestTypeEnum: string
     case FreeForm = 'freeform';
     case FormatTable = 'format_table';
 
-
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Summary => '要約',
             self::Translate => '翻訳',
             self::Rewrite => 'リライト',
@@ -23,5 +22,4 @@ enum RequestTypeEnum: string
             self::FormatTable => '表に整形',
         };
     }
-
 }

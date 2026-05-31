@@ -6,6 +6,7 @@ namespace App\Infrastructure\Mappers;
 
 use App\Domain\Models\Request\Request;
 use App\Domain\Models\Request\RequestCompletionToken;
+use App\Domain\Models\Request\RequestConversationId;
 use App\Domain\Models\Request\RequestEstimatedCostUsd;
 use App\Domain\Models\Request\RequestId;
 use App\Domain\Models\Request\RequestModel;
@@ -15,7 +16,6 @@ use App\Domain\Models\Request\RequestSourceText;
 use App\Domain\Models\Request\RequestStatus;
 use App\Domain\Models\Request\RequestTotalToken;
 use App\Domain\Models\Request\RequestType;
-use App\Domain\Models\Request\RequestConversationId;
 use App\Domain\Models\User\UserId;
 use App\Infrastructure\Eloquent\RequestEloquent;
 

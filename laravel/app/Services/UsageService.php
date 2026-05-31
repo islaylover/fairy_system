@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Domain\Dto\MonthlyUsageSummaryDto;
-use App\Domain\Models\User\UserId;
 use App\Domain\Models\Usage\MoneyUsd;
-use App\Domain\Models\Usage\YearMonth;
 use App\Domain\Models\Usage\MonthlyUsage;
+use App\Domain\Models\Usage\YearMonth;
+use App\Domain\Models\User\UserId;
 use App\Domain\Repositories\MonthlyUsageRepositoryInterface;
 use Illuminate\Support\Facades\Config;
 
@@ -21,8 +21,8 @@ readonly class UsageService
     public function getMonthlySummaryBoth(int $userId, ?string $yearMonthString = null): array
     {
         $targetYearMonth = new YearMonth($yearMonthString ?? now()->format('Y-m'));
-      
-        $user =  $this->getUserMonthlySummary($userId, $targetYearMonth);
+
+        $user = $this->getUserMonthlySummary($userId, $targetYearMonth);
         $userAll = $this->getGlobalMonthlySummary($targetYearMonth);
 
         return [
@@ -47,8 +47,8 @@ readonly class UsageService
     }
 
     /**
-    * 全会員の指定年月のOpenAIの利用料金情報を返す
-    */
+     * 全会員の指定年月のOpenAIの利用料金情報を返す
+     */
     private function getGlobalMonthlySummary(YearMonth $ym): array
     {
         $sum = $this->monthlyUsageRepository->sumAllUsersByYearMonth($ym);

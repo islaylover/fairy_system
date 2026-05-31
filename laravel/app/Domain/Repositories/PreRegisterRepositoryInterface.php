@@ -12,21 +12,21 @@ interface PreRegisterRepositoryInterface
 {
     /**
      * 全仮登録者を取得して返す
-     * 
+     *
      * @return PreRegister[] 仮登録者エンティティの配列
      */
-    public function getAll() :array;
+    public function getAll(): array;
 
     /**
      * IDから仮登録レコードを取得する
-     * 
+     *
      * @return PreRegister|null 見つからない場合はnull
      */
     public function findById(PreRegisterId $preRegisterId): ?PreRegister;
 
     /**
      * トークンから仮登録レコードを取得する
-     * 
+     *
      * @return PreRegister|null 見つからない場合はnull
      */
     public function findByToken(PreRegisterToken $token): ?PreRegister;

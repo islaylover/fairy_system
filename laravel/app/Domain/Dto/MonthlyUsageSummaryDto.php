@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Dto;
 
-use App\Domain\Models\Usage\MonthlyUsage;
 use App\Domain\Models\Usage\MoneyUsd;
+use App\Domain\Models\Usage\MonthlyUsage;
 
 final class MonthlyUsageSummaryDto
 {

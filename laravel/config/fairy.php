@@ -2,7 +2,7 @@
 
 return [
     'pre_register' => [
-        'expires_at' => 60, // minute ex 30, 60, 90, 120.... 
+        'expires_at' => 60, // minute ex 30, 60, 90, 120....
     ],
     'api' => [
         'token' => [

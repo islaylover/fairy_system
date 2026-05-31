@@ -8,15 +8,12 @@ use App\Domain\Utility\Validator\EnumValidator;
 
 readonly class RequestLogRole
 {
-
     public function __construct(private string $value)
     {
         EnumValidator::validate($value, [
             'label' => 'ロール',
             'allowed' => config('chatgpt.roles'),
         ]);
-
-        $this->value = $value;
     }
 
     public function getValue(): string

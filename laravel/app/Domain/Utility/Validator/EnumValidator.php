@@ -10,24 +10,25 @@ class EnumValidator
     /**
      * 指定された値が allowed に含まれているか検証
      *
-     * @param mixed $value 検証対象の値
-     * @param array $options ['label' => ..., 'allowed' => [...]]
+     * @param  mixed  $value  検証対象の値
+     * @param  array  $options  ['label' => ..., 'allowed' => [...]]
      * @return string 検証済みの値
+     *
      * @throws InvalidArgumentException
      */
     public static function validate(mixed $value, array $options): string
     {
-        $label   = $options['label'] ?? '値';
+        $label = $options['label'] ?? '値';
         $allowed = $options['allowed'] ?? [];
 
         $rules = [
             'required',
-            'in:' . implode(',', $allowed),
+            'in:'.implode(',', $allowed),
         ];
 
         $messages = [
             'value.required' => "{$label} は必須です。",
-            'value.in' => "{$label} は " . implode('、', $allowed) . " のいずれかでなければなりません。",
+            'value.in' => "{$label} は ".implode('、', $allowed).' のいずれかでなければなりません。',
         ];
 
         $validator = Validator::make(
@@ -40,6 +41,6 @@ class EnumValidator
             throw new InvalidArgumentException($validator->errors()->first('value'));
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 }

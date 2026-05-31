@@ -2,17 +2,16 @@
 
 namespace App\Domain\Utility\Validator;
 
-use InvalidArgumentException;
 use Illuminate\Support\Facades\Validator;
-use Exception;
+use InvalidArgumentException;
 
 class BooleanValidator
 {
     /**
      * 指定された値がbooleanか検証します。
      *
-     * @param  mixed  $bool_value
-     * @return String 検証済みのbolean値
+     * @return string 検証済みのbolean値
+     *
      * @throws InvalidArgumentException 無効な場合の場合
      */
     public static function validateBoolean(mixed $bool_value): bool

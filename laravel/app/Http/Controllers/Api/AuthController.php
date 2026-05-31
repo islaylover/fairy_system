@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\AuthService;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -19,20 +19,20 @@ class AuthController extends Controller
     // LOGIN処理[成功時はtokenを返す]
     public function login(Request $request): JsonResponse
     {
-        Log::info("LOGIN step01");
+        Log::info('LOGIN step01');
 
         // バリデーション（不正なら ValidationException → Handlerで422）
         $data = $request->validate([
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
-        Log::info("LOGIN step02");
+        Log::info('LOGIN step02');
 
         // ここで投げられる例外はすべて Handler に委譲
         $result = $this->authService->login($data['email'], $data['password']);
 
-        Log::info("LOGIN step03 ok");
+        Log::info('LOGIN step03 ok');
 
         return response()->json($result);
     }

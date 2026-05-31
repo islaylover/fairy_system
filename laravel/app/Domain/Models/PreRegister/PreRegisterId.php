@@ -13,6 +13,7 @@ readonly class PreRegisterId
     ) {
         NumberValidator::validateNumber($id, [
             'label' => '仮登録ID',
+            'min' => 1,
         ]);
     }
 

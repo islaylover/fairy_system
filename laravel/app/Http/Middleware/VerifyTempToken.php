@@ -11,7 +11,7 @@ class VerifyTempToken
     {
         $token = $request->header('X-TEMP-TOKEN');
 
-        if (!$token || !Cache::pull("temp_token:{$token}")) {
+        if (! $token || ! Cache::pull("temp_token:{$token}")) {
             return response()->json(['error' => 'Invalid or expired token'], 403);
         }
 

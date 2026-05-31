@@ -5,25 +5,23 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Domain\Models\PreRegister\PreRegister;
-use App\Domain\Models\PreRegister\PreRegisterId;
 use App\Domain\Models\PreRegister\PreRegisterEmail;
 use App\Domain\Models\PreRegister\PreRegisterExpiresAt;
 use App\Domain\Models\PreRegister\PreRegisterToken;
-use App\Domain\Repositories\PreRegisterRepositoryInterface;
 use App\Domain\Models\User\User;
-use App\Domain\Models\User\UserName;
 use App\Domain\Models\User\UserEmail;
+use App\Domain\Models\User\UserName;
 use App\Domain\Models\User\UserPassword;
+use App\Domain\Repositories\PreRegisterRepositoryInterface;
 use App\Domain\Repositories\UserRepositoryInterface;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\PreRegisterMail;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use RuntimeException;
-use Log;
 
 readonly class RegistrationService
 {
@@ -51,7 +49,7 @@ readonly class RegistrationService
 
         try {
             DB::transaction(function () use ($email, $preRegister) {
-            
+
                 $this->preRegisterRepository->create($preRegister);
 
                 $url = $this->generateRegisterUrl($preRegister->getToken());
@@ -59,7 +57,7 @@ readonly class RegistrationService
             });
 
         } catch (QueryException $e) {
-            throw $e; // エラー 
+            throw $e; // エラー
         }
     }
 
@@ -70,7 +68,6 @@ readonly class RegistrationService
     {
         return $this->preRegisterRepository->findByToken(new PreRegisterToken($token));
     }
-
 
     /**
      * 会員登録処理
@@ -103,11 +100,11 @@ readonly class RegistrationService
             $sqlState = $e->errorInfo[0] ?? null;
             $driverCode = $e->errorInfo[1] ?? null;
 
-            if ($sqlState === '23000' && (int)$driverCode === 1062) {
+            if ($sqlState === '23000' && (int) $driverCode === 1062) {
                 throw new RuntimeException('このメールアドレスはすでに使われています。');
             }
 
-            throw $e; // そのほかのエラー 
+            throw $e; // そのほかのエラー
         }
 
     }
@@ -117,6 +114,6 @@ readonly class RegistrationService
      */
     private function generateRegisterUrl(PreRegisterToken $token): string
     {
-        return url('/register/confirm?token=' . $token->getValue());
+        return url('/register/confirm?token='.$token->getValue());
     }
 }

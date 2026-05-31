@@ -12,6 +12,6 @@ class PreRegisterEloquent extends Model
     use HasFactory;
 
     protected $table = 'pre_registers';
-    protected $fillable = ['email', 'token', 'expires_at'];
 
+    protected $fillable = ['email', 'token', 'expires_at'];
 }

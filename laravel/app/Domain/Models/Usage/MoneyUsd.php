@@ -9,9 +9,10 @@ use InvalidArgumentException;
 readonly class MoneyUsd
 {
     private const SCALE = 5;
+
     private string $estimated_cost_usd;
 
-    public function __construct(string $estimated_cost_usd) 
+    public function __construct(string $estimated_cost_usd)
     {
         $estimated_cost_usd = trim($estimated_cost_usd);
 
@@ -19,7 +20,7 @@ readonly class MoneyUsd
             throw new InvalidArgumentException('USD金額が空です。');
         }
 
-        if (!preg_match('/^\d+(\.\d+)?$/', $estimated_cost_usd)) {
+        if (! preg_match('/^\d+(\.\d+)?$/', $estimated_cost_usd)) {
             throw new InvalidArgumentException("USD金額が不正です: {$estimated_cost_usd}");
         }
 
@@ -45,6 +46,7 @@ readonly class MoneyUsd
     public function compare(string $otherNumericString): int
     {
         $other = $this->normalizeScale($otherNumericString);
+
         return \bccomp($this->estimated_cost_usd, $other, self::SCALE);
     }
 
@@ -56,6 +58,7 @@ readonly class MoneyUsd
     public function isGreaterThanOrEqual(self $other): bool
     {
         $c = \bccomp($this->estimated_cost_usd, $other->estimated_cost_usd, self::SCALE);
+
         return $c === 1 || $c === 0;
     }
 
@@ -78,14 +81,16 @@ readonly class MoneyUsd
     {
         if (str_contains($value, '.')) {
             [$int, $frac] = explode('.', $value, 2);
-            $frac = substr($frac . str_repeat('0', self::SCALE), 0, self::SCALE);
+            $frac = substr($frac.str_repeat('0', self::SCALE), 0, self::SCALE);
             $int = ltrim($int, '0');
             $int = $int === '' ? '0' : $int;
-            return $int . '.' . $frac;
+
+            return $int.'.'.$frac;
         }
 
         $int = ltrim($value, '0');
         $int = $int === '' ? '0' : $int;
-        return $int . '.' . str_repeat('0', self::SCALE);
+
+        return $int.'.'.str_repeat('0', self::SCALE);
     }
 }

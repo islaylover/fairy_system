@@ -12,7 +12,7 @@ readonly class PreRegisterExpiresAt
 {
     private DateTime $expires_at;
 
-    public function __construct(string|\DateTimeInterface $expires_at)
+    public function __construct(string|DateTimeInterface $expires_at)
     {
         $this->expires_at = DateValidator::validateDatetime($expires_at, '仮登録有効期限');
     }

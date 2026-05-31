@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Models\RequestLog;
 
-use App\Domain\Request\RequestId;
+use App\Domain\Models\Request\RequestId;
 
-readonly class RequestLog {
-
+readonly class RequestLog
+{
     public function __construct(
         public RequestId $request_id,
         public RequestLogRole $role,

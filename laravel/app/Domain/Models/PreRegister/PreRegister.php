@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Models\PreRegister;
 
-readonly class PreRegister {
-
+readonly class PreRegister
+{
     public function __construct(
         public PreRegisterEmail $email,
         public PreRegisterToken $token,

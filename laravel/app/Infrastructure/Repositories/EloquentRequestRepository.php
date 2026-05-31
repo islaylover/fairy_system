@@ -1,37 +1,34 @@
-<?php 
+<?php
 
 namespace App\Infrastructure\Repositories;
 
 use App\Domain\Models\Request\Request;
 use App\Domain\Models\Request\RequestId;
-use App\Infrastructure\Mappers\RequestMapper;
-
 use App\Domain\Repositories\RequestRepositoryInterface;
 use App\Infrastructure\Eloquent\RequestEloquent;
-use Illuminate\Support\Collection;
+use App\Infrastructure\Mappers\RequestMapper;
 use Illuminate\Pagination\LengthAwarePaginator;
 use RuntimeException;
-use Log;
 
 class EloquentRequestRepository implements RequestRepositoryInterface
 {
-
     public function getAll(): array
     {
         return RequestEloquent::all()
-            ->map(fn($eloquentRequest) => RequestMapper::toDomain($eloquentRequest))
+            ->map(fn ($eloquentRequest) => RequestMapper::toDomain($eloquentRequest))
             ->all();
     }
 
     public function findById(RequestId $id): ?Request
     {
         $eloquentRequest = RequestEloquent::find($id->getValue());
+
         return $eloquentRequest ? RequestMapper::toDomain($eloquentRequest) : null;
     }
 
     public function create(Request $request): Request
     {
-        $eloquentRequest = new RequestEloquent();
+        $eloquentRequest = new RequestEloquent;
         RequestMapper::fillEloquentFromDomain($eloquentRequest, $request);
         $eloquentRequest->save();
 
@@ -41,10 +38,10 @@ class EloquentRequestRepository implements RequestRepositoryInterface
     public function update(Request $request): Request
     {
         $eloquentRequest = RequestEloquent::find($request->getId()->getValue());
-        if (!$eloquentRequest) {
+        if (! $eloquentRequest) {
             throw new RuntimeException('更新対象のデータが存在しません。');
         }
-        
+
         RequestMapper::fillEloquentFromDomain($eloquentRequest, $request);
         $eloquentRequest->save();
 
@@ -64,7 +61,7 @@ class EloquentRequestRepository implements RequestRepositoryInterface
             ->paginate($perPage, ['*'], 'page', $page);
 
         $paginator->setCollection(
-            $paginator->getCollection()->map(fn($e) => RequestMapper::toDomain($e))
+            $paginator->getCollection()->map(fn ($e) => RequestMapper::toDomain($e))
         );
 
         return $paginator;
@@ -80,7 +77,8 @@ class EloquentRequestRepository implements RequestRepositoryInterface
     public function getMaxConversationIdByUserId(int $userId): int
     {
         $max = RequestEloquent::where('user_id', $userId)->max('conversation_id');
-        return $max ? (int)$max : 0;
+
+        return $max ? (int) $max : 0;
     }
 
     public function existsByUserIdConversationIdAndStatus(int $userId, int $conversationId, int $status): bool
@@ -89,6 +87,6 @@ class EloquentRequestRepository implements RequestRepositoryInterface
             ->where('user_id', $userId)
             ->where('conversation_id', $conversationId)
             ->where('status', $status)
-        ->exists();
+            ->exists();
     }
 }

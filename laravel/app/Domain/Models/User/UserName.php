@@ -13,7 +13,7 @@ class UserName
     ) {
         StringValidator::validate($name, [
             'label' => 'ユーザー名',
-            'max' => 255
+            'max' => 255,
         ]);
     }
 
