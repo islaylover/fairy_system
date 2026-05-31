@@ -2,9 +2,9 @@
 
 namespace App\Mail;
 
+use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Bus\Queueable;
 
 class PreRegisterMail extends Mailable
 {

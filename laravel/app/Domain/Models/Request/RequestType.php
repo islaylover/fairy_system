@@ -15,6 +15,7 @@ class RequestType
     ) {
         if ($request_type instanceof RequestTypeEnum) {
             $this->request_type = $request_type;
+
             return;
         }
 

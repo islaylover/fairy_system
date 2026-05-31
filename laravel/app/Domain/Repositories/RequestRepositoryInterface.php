@@ -12,14 +12,14 @@ interface RequestRepositoryInterface
 {
     /**
      * 全リクエストを取得して返す
-     * 
-     * @return  Request[] リクエストエンティティの配列
+     *
+     * @return Request[] リクエストエンティティの配列
      */
-    public function getAll() :array;
+    public function getAll(): array;
 
     /**
      * IDでリクエストを取得する
-     * 
+     *
      * @return Request|null 見つからない場合はnull
      */
     public function findById(RequestId $requestId): ?Request;
@@ -37,8 +37,8 @@ interface RequestRepositoryInterface
     /**
      * IDを指定してリクエストを削除する
      */
-    public function delete(RequestId $requestId) :void;
-    
+    public function delete(RequestId $requestId): void;
+
     /**
      * ユーザーIDを指定して、ページングされたリクエスト一覧を取得する
      */

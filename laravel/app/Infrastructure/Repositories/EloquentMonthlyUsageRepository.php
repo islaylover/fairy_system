@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repositories;
 
-use App\Domain\Models\User\UserId;
-use App\Domain\Models\Usage\YearMonth;
 use App\Domain\Models\Usage\MonthlyUsage;
+use App\Domain\Models\Usage\YearMonth;
+use App\Domain\Models\User\UserId;
 use App\Domain\Repositories\MonthlyUsageRepositoryInterface;
 use App\Infrastructure\Eloquent\MonthlyUsageEloquent;
 use App\Infrastructure\Mappers\MonthlyUsageMapper;
 
 final class EloquentMonthlyUsageRepository implements MonthlyUsageRepositoryInterface
 {
-    public function findByUserIdAndYearMonth(UserId $userId, YearMonth $yearMonth): ?MonthlyUsage 
+    public function findByUserIdAndYearMonth(UserId $userId, YearMonth $yearMonth): ?MonthlyUsage
     {
         $eloquent = MonthlyUsageEloquent::query()
             ->where('user_id', $userId->getValue())
@@ -42,12 +42,11 @@ final class EloquentMonthlyUsageRepository implements MonthlyUsageRepositoryInte
 
         return [
             'year_month' => $yearMonth->getValue(),
-            'prompt_tokens' => (string)($row->prompt_tokens ?? 0),
-            'completion_tokens' => (string)($row->completion_tokens ?? 0),
-            'total_tokens' => (string)($row->total_tokens ?? 0),
-            'estimated_cost_usd' => (string)($row->estimated_cost_usd ?? '0.00000'),
-            'requests_done_count' => (int)($row->requests_done_count ?? 0),
+            'prompt_tokens' => (string) ($row->prompt_tokens ?? 0),
+            'completion_tokens' => (string) ($row->completion_tokens ?? 0),
+            'total_tokens' => (string) ($row->total_tokens ?? 0),
+            'estimated_cost_usd' => (string) ($row->estimated_cost_usd ?? '0.00000'),
+            'requests_done_count' => (int) ($row->requests_done_count ?? 0),
         ];
     }
-
 }

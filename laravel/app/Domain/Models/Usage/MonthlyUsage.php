@@ -6,8 +6,8 @@ namespace App\Domain\Models\Usage;
 
 use App\Domain\Models\User\UserId;
 
-readonly class MonthlyUsage {
-
+readonly class MonthlyUsage
+{
     public function __construct(
         public UserId $userId,
         public YearMonth $yearMonth,
@@ -36,12 +36,11 @@ readonly class MonthlyUsage {
         return new self(
             userId: new UserId(0), // ★全体集計用のダミーID（system扱い）
             yearMonth: $yearMonth,
-            promptTokens: (int)($sum['prompt_tokens'] ?? 0),
-            completionTokens: (int)($sum['completion_tokens'] ?? 0),
-            totalTokens: (int)($sum['total_tokens'] ?? 0),
-            estimatedCostUsd: new MoneyUsd((string)($sum['estimated_cost_usd'] ?? '0.00000')),
-            requestsDoneCount: (int)($sum['requests_done_count'] ?? 0),
+            promptTokens: (int) ($sum['prompt_tokens'] ?? 0),
+            completionTokens: (int) ($sum['completion_tokens'] ?? 0),
+            totalTokens: (int) ($sum['total_tokens'] ?? 0),
+            estimatedCostUsd: new MoneyUsd((string) ($sum['estimated_cost_usd'] ?? '0.00000')),
+            requestsDoneCount: (int) ($sum['requests_done_count'] ?? 0),
         );
     }
-
 }

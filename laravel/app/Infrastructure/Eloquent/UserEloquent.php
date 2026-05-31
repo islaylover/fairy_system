@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Eloquent;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
 class UserEloquent extends Authenticatable
@@ -16,16 +16,16 @@ class UserEloquent extends Authenticatable
     protected $table = 'users';
 
     protected $fillable = [
-        'name', 
-        'email', 
-        'password', 
-        'email_verified_at', 
-        'remember_token'
+        'name',
+        'email',
+        'password',
+        'email_verified_at',
+        'remember_token',
     ];
 
     protected $hidden = [
-        'password', 
-        'remember_token'
+        'password',
+        'remember_token',
     ];
 
     protected $casts = [

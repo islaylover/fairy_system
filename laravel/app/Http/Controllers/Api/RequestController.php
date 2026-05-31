@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\RequestService;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RequestController extends Controller
@@ -33,10 +33,10 @@ class RequestController extends Controller
     {
         // 不正なら ValidationException → Handlerで422
         $data = $request->validate([
-            'model'          => ['required', 'string'],
-            'request_type'   => ['required', 'string'],
-            'source_text'    => ['required', 'string'],
-            'conversation_id'=> ['nullable', 'integer'],
+            'model' => ['required', 'string'],
+            'request_type' => ['required', 'string'],
+            'source_text' => ['required', 'string'],
+            'conversation_id' => ['nullable', 'integer'],
         ]);
 
         $userId = (int) $request->user()->id;
@@ -47,10 +47,10 @@ class RequestController extends Controller
         return response()->json([
             'message' => 'リクストを登録しました。',
             'request' => [
-                'id'           => $newRequest->getId()->getValue(),
-                'model'        => $newRequest->getModel()->getValue(),
+                'id' => $newRequest->getId()->getValue(),
+                'model' => $newRequest->getModel()->getValue(),
                 'request_type' => $newRequest->getType()->getValue(),
-                'status'       => $newRequest->getStatus()->getValue(),
+                'status' => $newRequest->getStatus()->getValue(),
             ],
         ], 200);
     }
@@ -60,11 +60,11 @@ class RequestController extends Controller
     {
         // 不正なら ValidationException → Handlerで422
         $data = $request->validate([
-            'model'        => ['required', 'string'],
+            'model' => ['required', 'string'],
             'conversation_id' => ['required', 'integer'],
             'request_type' => ['required', 'string'],
-            'source_text'  => ['required', 'string'],
-            'status'       => ['required', 'integer'],
+            'source_text' => ['required', 'string'],
+            'status' => ['required', 'integer'],
         ]);
 
         $userId = (int) $request->user()->id;
@@ -74,10 +74,10 @@ class RequestController extends Controller
         return response()->json([
             'message' => 'リクストを更新しました。',
             'request' => [
-                'id'           => $updated->getId()->getValue(),
-                'model'        => $updated->getModel()->getValue(),
+                'id' => $updated->getId()->getValue(),
+                'model' => $updated->getModel()->getValue(),
                 'request_type' => $updated->getType()->getValue(),
-                'status'       => $updated->getStatus()->getValue(),
+                'status' => $updated->getStatus()->getValue(),
             ],
         ], 200);
     }

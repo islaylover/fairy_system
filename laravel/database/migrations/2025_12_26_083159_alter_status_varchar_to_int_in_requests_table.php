@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::table('requests', function (Blueprint $table) {
             $table->tinyInteger('status')
-            ->default(0)
-            ->comment('0:pending,1:processing,2:done,9:failed')
-            ->change();
+                ->default(0)
+                ->comment('0:pending,1:processing,2:done,9:failed')
+                ->change();
         });
     }
 
@@ -27,5 +27,5 @@ return new class extends Migration
         Schema::table('requests', function (Blueprint $table) {
             $table->string('status')->change();
         });
-    }    
+    }
 };

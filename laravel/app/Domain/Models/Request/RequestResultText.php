@@ -13,7 +13,7 @@ class RequestResultText
     ) {
         StringValidator::validate($result_text, [
             'label' => '結果テキスト',
-            'max' => 100000000
+            'max' => 100000000,
         ]);
     }
 

@@ -1,27 +1,24 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Domain\Repositories\RequestRepositoryInterface;
-use App\Domain\Repositories\ConversationLockInterface;
-use Illuminate\Pagination\LengthAwarePaginator;
-
-use App\Domain\Models\Request\Request;
-use App\Domain\Models\Request\RequestId;
-use App\Domain\Models\User\UserId;
-use App\Domain\Models\Request\RequestConversationId;
-use App\Domain\Models\Request\RequestModel;
-use App\Domain\Models\Request\RequestType;
-use App\Domain\Models\Request\RequestSourceText;
-use App\Domain\Models\Request\RequestStatus;
 use App\Domain\Dto\RequestSummaryDto;
 use App\Domain\Enums\RequestStatusEnum;
-use App\Services\UsageLimitService;
+use App\Domain\Models\Request\Request;
+use App\Domain\Models\Request\RequestConversationId;
+use App\Domain\Models\Request\RequestId;
+use App\Domain\Models\Request\RequestModel;
+use App\Domain\Models\Request\RequestSourceText;
+use App\Domain\Models\Request\RequestStatus;
+use App\Domain\Models\Request\RequestType;
+use App\Domain\Models\User\UserId;
+use App\Domain\Repositories\ConversationLockInterface;
+use App\Domain\Repositories\RequestRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
-use Illuminate\Support\Facades\Log;
 
 readonly class RequestService
 {
@@ -40,7 +37,7 @@ readonly class RequestService
         $items = [];
 
         /** @var Request $request */
-        foreach($paginator->items() as $request) {
+        foreach ($paginator->items() as $request) {
             $items[] = RequestSummaryDto::fromEntity($request)->toArray();
         }
 
@@ -56,25 +53,25 @@ readonly class RequestService
     // リクストを登録する
     public function createNewRequest(int $userId, array $data): Request
     {
-        //check if user or all usrs exceed limit amount 
+        // check if user or all usrs exceed limit amount
         $this->usageLimitService->assertCanCreateRequest($userId);
 
-        $conversationId = isset($data['conversation_id']) ? (int)$data['conversation_id'] : null;
+        $conversationId = isset($data['conversation_id']) ? (int) $data['conversation_id'] : null;
 
         // Case 02 既存のリクストに追加リクエスト[リクエスト＆OpenAIの回答後にさらに続けてリクエストするケース]
         if ($conversationId !== null) {
             // request data exists check
-            if (!$this->requestRepository->existByUserIdAndConversationId($userId, $conversationId)) {
+            if (! $this->requestRepository->existByUserIdAndConversationId($userId, $conversationId)) {
                 throw new InvalidArgumentException('指定された会話IDが存在しないか、権限がありません。');
             }
 
             // request data's status check
-            if (!$this->requestRepository->existsByUserIdConversationIdAndStatus(
+            if (! $this->requestRepository->existsByUserIdConversationIdAndStatus(
                 $userId,
                 $conversationId,
                 RequestStatusEnum::Done->value
             )) {
-                throw new InvalidArgumentException('この会話はまだ'. RequestStatusEnum::Done->label() .'していないため追加できません。');
+                throw new InvalidArgumentException('この会話はまだ'.RequestStatusEnum::Done->label().'していないため追加できません。');
             }
 
             $request = new Request(
@@ -122,12 +119,12 @@ readonly class RequestService
     // リクストを編集する
     public function updateRequest(int $userId, int $requestId, array $data): Request
     {
-        //check if user or all usrs exceed limit amount 
+        // check if user or all usrs exceed limit amount
         $this->usageLimitService->assertCanCreateRequest($userId);
 
         // check if request data exist
         $existing = $this->requestRepository->findById(new RequestId($requestId));
-        if (!$existing) {
+        if (! $existing) {
             throw new InvalidArgumentException('データが存在しません。');
         }
 
@@ -160,7 +157,7 @@ readonly class RequestService
 
         // check if request data exist
         $existing = $this->requestRepository->findById(new RequestId($requestId));
-        if (!$existing) {
+        if (! $existing) {
             throw new InvalidArgumentException('データが存在しません。');
         }
 
@@ -168,7 +165,7 @@ readonly class RequestService
         if ($existing->getUserId()->getValue() !== $userId) {
             throw new InvalidArgumentException('更新する権限がありません。');
         }
-        
+
         $this->requestRepository->delete(new RequestId($requestId));
     }
 }

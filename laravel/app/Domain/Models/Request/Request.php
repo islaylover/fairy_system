@@ -6,8 +6,8 @@ namespace App\Domain\Models\Request;
 
 use App\Domain\Models\User\UserId;
 
-readonly class Request {
-
+readonly class Request
+{
     public function __construct(
         public UserId $userId,
         public RequestConversationId $conversationId,

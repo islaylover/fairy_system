@@ -2,19 +2,18 @@
 
 namespace App\Providers;
 
+use App\Domain\Repositories\ConversationLockInterface;
+use App\Domain\Repositories\MonthlyUsageRepositoryInterface;
+use App\Domain\Repositories\PreRegisterRepositoryInterface;
+use App\Domain\Repositories\RequestRepositoryInterface;
+use App\Domain\Repositories\UserRepositoryInterface;
+use App\Infrastructure\Locks\MySqlConversationLock;
+use App\Infrastructure\Repositories\EloquentMonthlyUsageRepository;
+use App\Infrastructure\Repositories\EloquentPreRegisterRepository;
+use App\Infrastructure\Repositories\EloquentRequestRepository;
+use App\Infrastructure\Repositories\EloquentUserRepository;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
-use App\Domain\Repositories\PreRegisterRepositoryInterface;
-use App\Infrastructure\Repositories\EloquentPreRegisterRepository;
-use App\Domain\Repositories\UserRepositoryInterface;
-use App\Infrastructure\Repositories\EloquentUserRepository;
-use App\Domain\Repositories\RequestRepositoryInterface;
-use App\Infrastructure\Repositories\EloquentRequestRepository;
-use App\Domain\Repositories\MonthlyUsageRepositoryInterface;
-use App\Infrastructure\Repositories\EloquentMonthlyUsageRepository;
-
-use App\Domain\Repositories\ConversationLockInterface;
-use App\Infrastructure\Locks\MySqlConversationLock;
 
 class AppServiceProvider extends ServiceProvider
 {

@@ -13,7 +13,7 @@ class PreRegisterToken
     ) {
         StringValidator::validate($token, [
             'label' => '仮登録トークン',
-            'max' => 255
+            'max' => 255,
         ]);
     }
 

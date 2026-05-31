@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Mappers;
 
-use App\Domain\Models\User\UserId;
-use App\Domain\Models\Usage\YearMonth;
 use App\Domain\Models\Usage\MoneyUsd;
 use App\Domain\Models\Usage\MonthlyUsage;
+use App\Domain\Models\Usage\YearMonth;
+use App\Domain\Models\User\UserId;
 use App\Infrastructure\Eloquent\MonthlyUsageEloquent;
 
 final class MonthlyUsageMapper

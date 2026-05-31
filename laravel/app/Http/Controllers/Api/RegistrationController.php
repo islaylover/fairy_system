@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Services\RegistrationService;
 use App\Http\Controllers\Controller;
+use App\Services\RegistrationService;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RegistrationController extends Controller
@@ -32,18 +32,15 @@ class RegistrationController extends Controller
     // token整合性チェック
     public function confirmToken(Request $request): JsonResponse
     {
-        // tokenはqueryなので文字列チェックだけ（不正は業務分岐として返す）
         $token = $request->query('token');
 
-        if (!is_string($token) || $token === '') {
-            // 入力不正として422にしたいならここ（またはvalidateに寄せてもOK）
+        if (! is_string($token) || $token === '') {
             return response()->json(['message' => 'tokenが不正です'], 422);
         }
 
         $result = $this->registrationService->getByToken($token);
 
-        if (!$result) {
-            // ここは「例外」ではなく「存在しない」なのでControllerで返すのが自然
+        if (! $result) {
             return response()->json(['message' => 'tokenが不正です'], 422);
         }
 
@@ -55,8 +52,6 @@ class RegistrationController extends Controller
     // 本登録
     public function register(Request $request): JsonResponse
     {
-        // 本来ここは必須項目を validate した方が安全
-        // ※必要な項目名はあなたの completeRegister の仕様に合わせて調整してね
         $data = $request->validate([
             'token' => ['required', 'string'],
             'password' => ['required', 'string'],

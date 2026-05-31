@@ -11,9 +11,8 @@ class DateValidator
     /**
      * 日時文字列を検証し、DateTime オブジェクトとして返す
      *
-     * @param mixed $datetime
-     * @param string $column ラベル（例: "開催日時"）
-     * @return DateTime
+     * @param  string  $column  ラベル（例: "開催日時"）
+     *
      * @throws InvalidArgumentException
      */
     public static function validateDatetime(mixed $datetime, string $column): DateTime
@@ -29,11 +28,11 @@ class DateValidator
                 'datetime.date_format' => "{$column} は YYYY-MM-DD HH:MM:SS の形式で入力してください。",
             ]
         );
-    
+
         if ($validator->fails()) {
             throw new InvalidArgumentException($validator->errors()->first('datetime'));
         }
-    
+
         try {
             return new DateTime($datetime);
         } catch (\Exception $e) {
@@ -41,14 +40,14 @@ class DateValidator
         }
     }
 
-    /** 
+    /**
      * 'YYYY-MM' 形式の年月を検証し、正規化した文字列（YYYY-MM）を返す
      *
-     * @param mixed $yearMonth
-     * @param string $label ラベル（例: "対象年月"）
-     * @param int $minYear 最小年（任意）
-     * @param int $maxYear 最大年（任意）
+     * @param  string  $label  ラベル（例: "対象年月"）
+     * @param  int  $minYear  最小年（任意）
+     * @param  int  $maxYear  最大年（任意）
      * @return string 正規化済み 'YYYY-MM'
+     *
      * @throws InvalidArgumentException
      */
     public static function validateYearMonth(
@@ -71,7 +70,7 @@ class DateValidator
             throw new InvalidArgumentException($validator->errors()->first('year_month'));
         }
 
-        $value = trim((string)$yearMonth);
+        $value = trim((string) $yearMonth);
         [$y, $m] = array_map('intval', explode('-', $value, 2));
 
         if ($y < $minYear || $y > $maxYear) {
@@ -82,6 +81,5 @@ class DateValidator
         }
 
         return sprintf('%04d-%02d', $y, $m);
-    }    
-
+    }
 }

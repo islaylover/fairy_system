@@ -5,28 +5,28 @@ declare(strict_types=1);
 namespace App\Domain\Repositories;
 
 use App\Domain\Models\User\User;
-use App\Domain\Models\User\UserId;
 use App\Domain\Models\User\UserEmail;
+use App\Domain\Models\User\UserId;
 
 interface UserRepositoryInterface
 {
     /**
      * ユーザーを全取得して返す
-     * 
+     *
      * @return User[] ユーザーエンティティの配列
      */
-    public function getAll() :array;
+    public function getAll(): array;
 
     /**
      * IDからユーザーを取得する
-     * 
+     *
      * @return User|null 見つからない場合はnull
      */
     public function findById(UserId $userId): ?User;
 
     /**
      * メールアドレスからユーザーを取得する
-     * 
+     *
      * @return User|null 見つからない場合はnull
      */
     public function findByEmail(UserEmail $userEmail): ?User;
@@ -39,19 +39,19 @@ interface UserRepositoryInterface
     /**
      * ユーザー情報を更新する
      */
-    public function update(User $User):void;
+    public function update(User $User): void;
 
     /**
      * IDを指定してユーザーを削除する
      */
     public function delete(UserId $userId): void;
- 
+
     /**
      * ログイン成たユーザー対してAPIアクセストークンを発行して返す
-     *  
-     * @param   UserEmail $userEmail ユーザーメールアドレス
-     * @param　 string     $tokenName 発行トークン名（デフォルト： api-token）
-     * @return  string    発行されたプレーンテキストトークン
+     *
+     * @param  UserEmail  $userEmail  ユーザーメールアドレス
+     * @param  string  $tokenName  発行トークン名（デフォルト： api-token）
+     * @return string 発行されたプレーンテキストトークン
      */
     public function issueApiToken(UserEmail $userEmail, string $tokenName = 'api-token'): string;
 

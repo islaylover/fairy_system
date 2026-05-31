@@ -27,5 +27,4 @@ readonly class YearMonth
     {
         return $this->yearMonth;
     }
-
 }

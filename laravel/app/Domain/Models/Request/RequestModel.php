@@ -13,7 +13,7 @@ class RequestModel
     ) {
         StringValidator::validate($model, [
             'label' => 'ChatGPT Model',
-            'max' => 255
+            'max' => 255,
         ]);
     }
 

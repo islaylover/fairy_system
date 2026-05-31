@@ -11,9 +11,11 @@ class RequestStatus
 {
     private RequestStatusEnum $status;
 
-    public function __construct(int|RequestStatusEnum $status) {
+    public function __construct(int|RequestStatusEnum $status)
+    {
         if ($status instanceof RequestStatusEnum) {
             $this->status = $status;
+
             return;
         }
 

@@ -12,7 +12,7 @@ readonly class PreRegisterEmail
         private string $email
     ) {
         EmailValidator::validateEmail($email, [
-            'label' => '仮登録メールアドレス'
+            'label' => '仮登録メールアドレス',
         ]);
     }
 

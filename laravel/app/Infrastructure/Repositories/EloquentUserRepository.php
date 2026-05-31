@@ -1,22 +1,19 @@
-<?php 
+<?php
 
 namespace App\Infrastructure\Repositories;
 
 use App\Domain\Models\User\User;
+use App\Domain\Models\User\UserEmail;
 use App\Domain\Models\User\UserId;
 use App\Domain\Models\User\UserName;
-use App\Domain\Models\User\UserEmail;
 use App\Domain\Models\User\UserPassword;
 use App\Domain\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Eloquent\UserEloquent;
 use Illuminate\Support\Collection;
-use Carbon\Carbon;
 use RuntimeException;
-use Log;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
-
     public function getAll(): array
     {
         return UserEloquent::all()->map(function ($eloquentUser) {
@@ -26,15 +23,16 @@ class EloquentUserRepository implements UserRepositoryInterface
                 new UserPassword($eloquentUser->password),
                 new UserId($eloquentUser->id)
             );
-        })->all();//all() : convert result(collection) to array
+        })->all(); // all() : convert result(collection) to array
     }
 
     public function findById(UserId $id): ?User
     {
         $eloquentUser = UserEloquent::find($id->getValue());
-        if (!$eloquentUser) {
+        if (! $eloquentUser) {
             return null;
         }
+
         return new User(
             new UserName($eloquentUser->name),
             new UserEmail($eloquentUser->email),
@@ -47,9 +45,10 @@ class EloquentUserRepository implements UserRepositoryInterface
     {
         $eloquentUser = UserEloquent::where('email', $email->getValue())->first();
 
-        if (!$eloquentUser) {
+        if (! $eloquentUser) {
             return null;
         }
+
         return new User(
             new UserName($eloquentUser->name),
             new UserEmail($eloquentUser->email),
@@ -60,7 +59,7 @@ class EloquentUserRepository implements UserRepositoryInterface
 
     public function create(User $User): void
     {
-        $eloquentUser = new UserEloquent();    
+        $eloquentUser = new UserEloquent;
         $eloquentUser->name = $User->getName()->getValue();
         $eloquentUser->email = $User->getEmail()->getValue();
         $eloquentUser->password = $User->getPassword()->getValue();
@@ -70,12 +69,12 @@ class EloquentUserRepository implements UserRepositoryInterface
     public function update(User $User): void
     {
         $eloquentUser = UserEloquent::find($User->getId()->getValue());
-        if (!$eloquentUser) {
+        if (! $eloquentUser) {
             throw new RuntimeException('User not found');
         }
         $eloquentUser->name = $User->getName()->getValue();
         $eloquentUser->email = $User->getEmail()->getValue();
-        $eloquentUser->password = $User->getPassword()->getValue();  
+        $eloquentUser->password = $User->getPassword()->getValue();
         $eloquentUser->save();
     }
 
@@ -86,13 +85,10 @@ class EloquentUserRepository implements UserRepositoryInterface
 
     public function issueApiToken(UserEmail $userEmail, string $tokenName = 'api-token'): string
     {
-        Log::info("-- issue token step1 --");
         $userEloquent = UserEloquent::where('email', $userEmail->getValue())->firstOrFail();
         // 既存api token削除
-        Log::info("-- issue token step2 --");
         $userEloquent->tokens()->delete();
         // 新しいapi token発行
-        Log::info("-- issue token step3 --");
         $apiToken = $userEloquent->createToken($tokenName)->plainTextToken;
 
         return $apiToken;

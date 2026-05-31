@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Models\User;
 
-readonly class User {
-
+readonly class User
+{
     public function __construct(
         public UserName $name,
         public UserEmail $email,
@@ -28,7 +28,7 @@ readonly class User {
         return $this->email;
     }
 
-        public function getPassword(): UserPassword
+    public function getPassword(): UserPassword
     {
         return $this->password;
     }

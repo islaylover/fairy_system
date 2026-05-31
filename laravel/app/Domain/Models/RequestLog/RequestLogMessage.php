@@ -13,7 +13,7 @@ class RequestLogMessage
     ) {
         StringValidator::validate($message, [
             'label' => '質問/回答テキスト',
-            'max' => 100000000
+            'max' => 100000000,
         ]);
     }
 
