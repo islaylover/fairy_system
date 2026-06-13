@@ -13,6 +13,7 @@ readonly class RequestId
     ) {
         NumberValidator::validateNumber($id, [
             'label' => 'リクエストID',
+            'min' => 1,
         ]);
     }
 

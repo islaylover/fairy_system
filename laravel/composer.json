@@ -66,10 +66,10 @@
             "./vendor/bin/phpstan analyse app tests --memory-limit=512M"
         ],
         "cs-check": [
-            "./vendor/bin/pint --test"
+            "./vendor/bin/pint --test -v"
         ],
         "cs-fix": [
-            "./vendor/bin/pint"
+            "./vendor/bin/pint -v"
         ]
     },
     "extra": {

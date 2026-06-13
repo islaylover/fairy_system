@@ -13,6 +13,7 @@ readonly class RequestCompletionToken
     ) {
         NumberValidator::validateNumber($completion_tokens, [
             'label' => 'Completion Token',
+            'min' => 1,
         ]);
     }
 

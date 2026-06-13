@@ -13,6 +13,7 @@ readonly class RequestConversationId
     ) {
         NumberValidator::validateNumber($conversation_id, [
             'label' => '会話ID',
+            'min' => 1,
         ]);
     }
 

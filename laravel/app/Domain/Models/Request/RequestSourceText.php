@@ -13,7 +13,7 @@ class RequestSourceText
     ) {
         StringValidator::validate($source_text, [
             'label' => 'ソーステキスト',
-            'max' => 100000000,
+            'max' => 50000,
         ]);
     }
 
