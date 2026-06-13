@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Domain\Models\PreRegister;
+namespace Tests\Unit\Domain\Models\Request;
 
-use App\Domain\Models\PreRegister\PreRegisterId;
+use App\Domain\Models\Request\RequestConversationId;
 use InvalidArgumentException;
 use Tests\TestCase;
 use TypeError;
 
-class PreRegisterIdTest extends TestCase
+class RequestConversationIdTest extends TestCase
 {
-    public function test_can_create_pre_register_id_with_valid_value(): void
+    public function test_can_create_conversation_id_with_valid_value(): void
     {
-        $id = new PreRegisterId(1);
+        $id = new RequestConversationId(1);
 
         $this->assertSame(1, $id->getValue());
     }
 
-    public function test_can_careate_pre_register_id_with_large_value(): void
+    public function test_can_careate_conversation_id_with_large_value(): void
     {
-        $id = new PreRegisterId(999999);
+        $id = new RequestConversationId(999999);
 
         $this->assertSame(999999, $id->getValue());
     }
@@ -29,27 +29,27 @@ class PreRegisterIdTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new PreRegisterId(0);
+        new RequestConversationId(0);
     }
 
     public function test_throw_exception_when_negative_value(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new PreRegisterId(-1);
+        new RequestConversationId(-1);
     }
 
     public function test_throw_exception_when_null_value(): void
     {
         $this->expectException(TypeError::class);
 
-        new PreRegisterId(null);
+        new RequestConversationId(null);
     }
 
     public function test_throw_exception_when_string_value(): void
     {
         $this->expectException(TypeError::class);
 
-        new PreRegisterId('1');
+        new RequestConversationId('1');
     }
 }

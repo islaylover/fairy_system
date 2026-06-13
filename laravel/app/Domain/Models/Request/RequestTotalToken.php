@@ -13,6 +13,7 @@ readonly class RequestTotalToken
     ) {
         NumberValidator::validateNumber($total_tokens, [
             'label' => 'Total Token',
+            'min' => 1,
         ]);
     }
 

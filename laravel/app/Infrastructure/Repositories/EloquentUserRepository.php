@@ -16,14 +16,17 @@ class EloquentUserRepository implements UserRepositoryInterface
 {
     public function getAll(): array
     {
-        return UserEloquent::all()->map(function ($eloquentUser) {
-            return new User(
-                new UserName($eloquentUser->name),
-                new UserEmail($eloquentUser->email),
-                new UserPassword($eloquentUser->password),
-                new UserId($eloquentUser->id)
-            );
-        })->all(); // all() : convert result(collection) to array
+        return UserEloquent::orderBy('id', 'asc')
+            ->get()
+            ->map(function ($eloquentUser) {
+                return new User(
+                    new UserName($eloquentUser->name),
+                    new UserEmail($eloquentUser->email),
+                    new UserPassword($eloquentUser->password),
+                    new UserId($eloquentUser->id),
+                );
+            })
+            ->all(); // all():convert result(collection) to array
     }
 
     public function findById(UserId $id): ?User

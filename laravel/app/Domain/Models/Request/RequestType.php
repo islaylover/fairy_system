@@ -11,7 +11,8 @@ class RequestType
 {
     private RequestTypeEnum $request_type;
 
-    public function __construct(string|RequestTypeEnum $request_type
+    public function __construct(
+        string|RequestTypeEnum $request_type
     ) {
         if ($request_type instanceof RequestTypeEnum) {
             $this->request_type = $request_type;

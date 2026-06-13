@@ -13,6 +13,7 @@ readonly class RequestPromptToken
     ) {
         NumberValidator::validateNumber($prompt_tokens, [
             'label' => 'Prompt Token',
+            'min' => 1,
         ]);
     }
 
