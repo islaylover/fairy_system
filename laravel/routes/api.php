@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BatchOpenAiRequestController;
 use App\Http\Controllers\Api\ChatGptConfigController;
 use App\Http\Controllers\Api\RegistrationController;
 use App\Http\Controllers\Api\RequestController;
@@ -46,4 +47,9 @@ Route::middleware('auth:sanctum')->group(function () {
 // Python Batch向け (X-BATCH-KEY)
 Route::prefix('batch')->middleware('batch.key')->group(function () {
     Route::get('/chatgpt/config', [ChatGptConfigController::class, 'indexForBatch']);
+    Route::get('/openai-requests/limits/global', [BatchOpenAiRequestController::class, 'globalLimit']);
+    Route::post('/openai-requests/claim', [BatchOpenAiRequestController::class, 'claim']);
+    Route::get('/openai-requests/{id}/limits/request', [BatchOpenAiRequestController::class, 'requestLimit']);
+    Route::post('/openai-requests/{id}/complete', [BatchOpenAiRequestController::class, 'complete']);
+    Route::post('/openai-requests/{id}/fail', [BatchOpenAiRequestController::class, 'fail']);
 });

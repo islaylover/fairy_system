@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Models\RequestLog;
 
+use App\Domain\Enums\MessageRoleEnum;
 use App\Domain\Utility\Validator\EnumValidator;
 
 readonly class RequestLogRole
@@ -12,7 +13,7 @@ readonly class RequestLogRole
     {
         EnumValidator::validate($value, [
             'label' => 'ロール',
-            'allowed' => config('chatgpt.roles'),
+            'allowed' => array_column(MessageRoleEnum::cases(), 'value'),
         ]);
     }
 

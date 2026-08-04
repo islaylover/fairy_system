@@ -50,6 +50,8 @@ return [
         ],
     ],
 
+    'history_max_messages' => (int) env('OPENAI_HISTORY_MAX_MESSAGES', 6),
+
     /*
     |--------------------------------------------------------------------------
     | Token Limits

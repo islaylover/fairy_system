@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Domain\Dto\RequestSummaryDto;
+use App\Domain\Enums\MessageRoleEnum;
 use App\Domain\Enums\RequestStatusEnum;
 use App\Domain\Models\Request\Request;
 use App\Domain\Models\Request\RequestConversationId;
@@ -13,8 +14,12 @@ use App\Domain\Models\Request\RequestModel;
 use App\Domain\Models\Request\RequestSourceText;
 use App\Domain\Models\Request\RequestStatus;
 use App\Domain\Models\Request\RequestType;
+use App\Domain\Models\RequestLog\RequestLog;
+use App\Domain\Models\RequestLog\RequestLogMessage;
+use App\Domain\Models\RequestLog\RequestLogRole;
 use App\Domain\Models\User\UserId;
 use App\Domain\Repositories\ConversationLockInterface;
+use App\Domain\Repositories\RequestLogRepositoryInterface;
 use App\Domain\Repositories\RequestRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +30,7 @@ readonly class RequestService
     public function __construct(
         private RequestRepositoryInterface $requestRepository,
         private ConversationLockInterface $conversationLock,
+        private RequestLogRepositoryInterface $requestLogRepository,
         private readonly UsageLimitService $usageLimitService
     ) {}
 
@@ -85,7 +91,12 @@ readonly class RequestService
                 null, null, null, null
             );
 
-            return $this->requestRepository->create($request);
+            return DB::transaction(function () use ($request): Request {
+                $createdRequest = $this->requestRepository->create($request);
+                $this->createUserRequestLog($createdRequest);
+
+                return $createdRequest;
+            });
         }
 
         // Case 01 新規リクエスト
@@ -111,7 +122,10 @@ readonly class RequestService
                     null
                 );
 
-                return $this->requestRepository->create($request);
+                $createdRequest = $this->requestRepository->create($request);
+                $this->createUserRequestLog($createdRequest);
+
+                return $createdRequest;
             });
         });
     }
@@ -167,5 +181,19 @@ readonly class RequestService
         }
 
         $this->requestRepository->delete(new RequestId($requestId));
+    }
+
+    private function createUserRequestLog(Request $request): void
+    {
+        $requestId = $request->getId();
+        if ($requestId === null) {
+            throw new InvalidArgumentException('リクエストIDが存在しません。');
+        }
+
+        $this->requestLogRepository->create(new RequestLog(
+            $requestId,
+            new RequestLogRole(MessageRoleEnum::User->value),
+            new RequestLogMessage($request->getSourceText()->getValue())
+        ));
     }
 }
