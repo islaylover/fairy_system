@@ -9,7 +9,7 @@ use App\Domain\Models\User\UserId;
 readonly class MonthlyUsage
 {
     public function __construct(
-        public UserId $userId,
+        public ?UserId $userId,
         public YearMonth $yearMonth,
         public int $promptTokens,
         public int $completionTokens,
@@ -34,7 +34,7 @@ readonly class MonthlyUsage
     public static function fromSumRow(array $sum, YearMonth $yearMonth): self
     {
         return new self(
-            userId: new UserId(0), // ★全体集計用のダミーID（system扱い）
+            userId: null,
             yearMonth: $yearMonth,
             promptTokens: (int) ($sum['prompt_tokens'] ?? 0),
             completionTokens: (int) ($sum['completion_tokens'] ?? 0),

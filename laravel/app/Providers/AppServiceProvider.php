@@ -5,12 +5,16 @@ namespace App\Providers;
 use App\Domain\Repositories\ConversationLockInterface;
 use App\Domain\Repositories\MonthlyUsageRepositoryInterface;
 use App\Domain\Repositories\PreRegisterRepositoryInterface;
+use App\Domain\Repositories\RequestLogRepositoryInterface;
 use App\Domain\Repositories\RequestRepositoryInterface;
+use App\Domain\Repositories\UsageLedgerRepositoryInterface;
 use App\Domain\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Locks\MySqlConversationLock;
 use App\Infrastructure\Repositories\EloquentMonthlyUsageRepository;
 use App\Infrastructure\Repositories\EloquentPreRegisterRepository;
+use App\Infrastructure\Repositories\EloquentRequestLogRepository;
 use App\Infrastructure\Repositories\EloquentRequestRepository;
+use App\Infrastructure\Repositories\EloquentUsageLedgerRepository;
 use App\Infrastructure\Repositories\EloquentUserRepository;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
@@ -26,7 +30,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PreRegisterRepositoryInterface::class, EloquentPreRegisterRepository::class);
         $this->app->bind(UserRepositoryInterface::class, EloquentUserRepository::class);
         $this->app->bind(RequestRepositoryInterface::class, EloquentRequestRepository::class);
+        $this->app->bind(RequestLogRepositoryInterface::class, EloquentRequestLogRepository::class);
         $this->app->bind(MonthlyUsageRepositoryInterface::class, EloquentMonthlyUsageRepository::class);
+        $this->app->bind(UsageLedgerRepositoryInterface::class, EloquentUsageLedgerRepository::class);
         $this->app->bind(ConversationLockInterface::class, MySqlConversationLock::class);
     }
 

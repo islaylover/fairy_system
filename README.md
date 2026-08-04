@@ -93,9 +93,15 @@ CHATGPT_MONTHLY_GLOBAL_LIMIT_USD=10.00000
 
 ```env
 OPENAI_API_KEY=your_api_key_here
+OPENAI_MODEL=gpt-4o
+OPENAI_TIMEOUT=60
 
 BATCH_API_KEY=super-secret-batch-key
-BATCH_BASE_URL=http://nginx
+BATCH_BASE_URL=https://nginx
+BATCH_API_TIMEOUT=30
+BATCH_SIZE=1
+MAX_PER_RUN=200
+SLEEP_LOOP_SECONDS=0.2
 
 DB_HOST=mysql
 DB_PORT=3306
@@ -201,6 +207,19 @@ docker compose up -d
 ```bash
 docker compose exec python_batch bash
 python main.py
+```
+
+Python batch は MySQLへ直接接続せず、Laravel Batch API経由で未処理リクエストの取得、処理結果保存、利用量集計を行う。
+
+主なBatch API：
+
+```text
+GET  /api/batch/chatgpt/config
+GET  /api/batch/openai-requests/limits/global
+POST /api/batch/openai-requests/claim
+GET  /api/batch/openai-requests/{id}/limits/request
+POST /api/batch/openai-requests/{id}/complete
+POST /api/batch/openai-requests/{id}/fail
 ```
 
 ---

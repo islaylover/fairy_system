@@ -19,4 +19,16 @@ interface MonthlyUsageRepositoryInterface
      * 指定された年月のOpenAIの総合使用情報を算出する
      */
     public function sumAllUsersByYearMonth(YearMonth $yearMonth): array;
+
+    /**
+     * 指定ユーザー・年月のOpenAI利用量を加算する
+     */
+    public function addUsage(
+        UserId $userId,
+        YearMonth $yearMonth,
+        int $promptTokens,
+        int $completionTokens,
+        int $totalTokens,
+        string $estimatedCostUsd
+    ): void;
 }
